@@ -7,35 +7,10 @@ error_reporting(E_ALL);
 	define('DB_PASS', 'cre12321');
 	define('DB_NAME', 'CRE');
 
-	$base_url = 'http://localhost/CRElection/';
+	$base_url = 'http://localhost:8888/CRElectionMukul/';
 
 	// Update the name of the election
 	$electionName = 'CR Election';
-
-	$multiple_votes = false;
-	$max_votes = 1;
-
-	$negative_votes = false;
-	$max_n_votes = 1;
-
-//---------------------------------------------------------------------//
-// Set default values for config option
-
-	if ( !(isset($multiple_votes) && $multiple_votes === true) )
-		$multiple_votes = false;
-
-	if ( !isset($max_votes) )
-		$max_votes = 1;
-
-	if ( !(isset($negative_votes) && $negative_votes === true) ) {
-		$negative_votes = false;
-		$max_n_votes = 0;
-	}
-
-	if ( !isset($max_n_votes) )
-		$max_n_votes = 1;
-
-//---------------------------------------------------------------------//
 
 	// Database connection
 	$DB = mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME);
