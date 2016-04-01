@@ -10,7 +10,7 @@ error_reporting(E_ALL);
 	$base_url = 'http://localhost:8888/CRElectionMukul/';
 
 	// Update the name of the election
-	$electionName = 'CR Election';
+	$electionName = 'STV Election';
 
 	// Database connection
 	$DB = mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME);
