@@ -18,13 +18,7 @@
 	$htmlOutput = '';
 
 	if ( allowed() ) {
-		if ( (empty($multiple_votes) || $max_votes <= 1) ) {
-			// Check and account for multiple votes
-			$input_type = 'radio';
-			$input_req = 'required';
-		}
-		else {
-			$htmlOutput .= "
+		$htmlOutput .= "
 			<script>
 				function checkVotes(form) {
 					var inputs = form.getElementsByTagName('input');
@@ -37,10 +31,6 @@
 				}
 			</script>
 			";
-			$input_type = 'checkbox';
-			$input_req = '';
-		}
-
 		$htmlOutput .= "<form action='vote.php' method='post' class='vote' onsubmit='return checkVotes(this)'>";
 		$candidates = get_candidates();
 		if ( count($candidates) ) {
@@ -85,11 +75,6 @@
 			foreach ( array(1, 2, 3) as $rank ){
 				$htmlOutput .= "<input type='text' name='$rank' hidden>";
 			}
-			$htmlOutput .= '<table>';
-			foreach ( $candidates as $id => $name ){
-				//$htmlOutput .= "<label><input type='$input_type' name='candidate_id[]' value='$id' $input_req>$name</label><br>";
-			}
-			$htmlOutput .= '</table>';
 			$htmlOutput .= "<input class='btn' type='submit' value='Vote'></form>";
 		}
 		else {

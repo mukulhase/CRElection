@@ -16,19 +16,22 @@
 		header("Location: ".$base_url);
 		die();
 	}
-	if ( isset( $_POST["candidate_id"] ) && count($_POST["candidate_id"]) ) {
+	if ( isset( $_POST["1"] ) && isset( $_POST["2"] ) && isset( $_POST["3"] ) ) {
 
 		// Process votes
-		$candidates = $_POST["candidate_id"];
-		//Sample Validation
 		if ( false ) {
 			block_voting();
 			die("Something is wrong");
 		}
 		//insert into db, to be changed
-		foreach ( $candidates as $candidate ) {
-			$query = mysqli_prepare($DB, "UPDATE `candidates` set votes = votes + 1 WHERE id=?");
-			mysqli_stmt_bind_param($query, 'i', $candidate);
+		$query = mysqli_prepare($DB, "INSERT INTO `votes` VALUES()");
+		if ( !mysqli_stmt_execute($query) ) {
+			die("Some Error Occured. Response is not recorded. Contact Administrator.");
+		}
+		$voteid=mysqli_insert_id($DB);
+		foreach ( array("1","2","3") as $index ) {
+			$query = mysqli_prepare($DB, "INSERT INTO `ranks` (voteid,candidate,rank) VALUES(?,?,?)");
+			mysqli_stmt_bind_param($query, 'iii', $voteid,$_POST[$index],$index);
 			if ( !mysqli_stmt_execute($query) ) {
 				die("Some Error Occured. Response is not recorded. Contact Administrator.");
 			}
