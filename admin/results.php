@@ -12,24 +12,17 @@
 	mysqli_stmt_store_result($query);
 	while(mysqli_stmt_fetch($query)){
 		$htmlOutput .= '<tr><td>'.$name.'</td><td>';
-		if ( $negative_votes ) {
-			$htmlOutput .= '<span class="pos">+'.$votes.'</span> <span class="neg">-'.$n_votes.'</span>';
-		}
-		else {
-			$htmlOutput .= $votes;
-		}
+
+		$htmlOutput .= $votes;
+
 		$htmlOutput .= '</td></tr>';
 		$total_votes += $votes;
 		$total_n_votes += $n_votes;
 	}
 
 	$htmlOutput .= '<tr class="total"><td>Total</td><td>';
-	if ( $negative_votes ) {
-		$htmlOutput .= '<span class="pos">+'.$total_votes.'</span> <span class="neg">-'.$total_n_votes.'</span>';
-	}
-	else {
-		$htmlOutput .= $total_votes;
-	}
+	$htmlOutput .= $total_votes;
+
 	$htmlOutput .= '</td></tr>';
 	$htmlOutput .= '</table>';
 
