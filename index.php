@@ -25,30 +25,17 @@
 		}
 		else {
 			$htmlOutput .= "
-			<!-- script>
+			<script>
 				function checkVotes(form) {
-					var allowed = ".$max_votes.";
-					var n_allowed = ".$max_n_votes.";
 					var inputs = form.getElementsByTagName('input');
+					var rankings =  $('#sortable2').sortable( \"toArray\" )
 					var voted = 0, n_voted = 0;
 					for ( i=0; i<inputs.length; i++ ) {
-						if ( inputs[i].name == 'candidate_id[]' && inputs[i].checked )
-							++voted;
-						else if ( inputs[i].name == 'n_candidate_id[]' && inputs[i].checked )
-							++n_voted;
-					}
-					if ( voted != allowed || n_voted > n_allowed) {
-						if ( n_allowed == 0 ) {
-							alert('Vote for exactly '+allowed+' candidates.');
-						}
-						else {
-							alert('Please cast exactly '+allowed+' positive and maximum '+n_allowed+' negative votes.');
-						}
-						return false;
+						inputs[i].value=rankings[i];
 					}
 					return true;
 				}
-			</script-->
+			</script>
 			";
 			$input_type = 'checkbox';
 			$input_req = '';
@@ -57,9 +44,50 @@
 		$htmlOutput .= "<form action='vote.php' method='post' class='vote' onsubmit='return checkVotes(this)'>";
 		$candidates = get_candidates();
 		if ( count($candidates) ) {
+			$htmlOutput .= '
+<table class="sortabletable">
+<tr>
+<th>Candidates</th><th>Your Ranking</th>
+</tr>
+<tr>
+<td valign="top">
+<ul id="sortable1" class="connectedSortable">';
+  //<li class="ui-state-default">Item 1</li>
+			foreach ( $candidates as $id => $name ){
+				$htmlOutput .= "<li class=\"ui-state-default\" id='$id'>$name</li>";
+			}
+			$htmlOutput.= '
+</ul>
+</td>
+ <td valign="top">
+<ol id="sortable2" class="connectedSortable">
+</ol>
+</td>
+</tr>
+</table>
+<script>
+  $(function() {
+    $( "#sortable1, #sortable2" ).sortable({
+      connectWith: ".connectedSortable",
+      receive: function(event, ui) {
+            // so if > 10
+            if (($(this).children().length > 3)&&(this.id=="sortable2")) {
+            	
+                //ui.sender: will cancel the change.
+                //Useful in the \'receive\' callback.
+                $(ui.sender).sortable(\'cancel\');
+            }
+        }
+    }).disableSelection();
+  });
+</script>
+';
+			foreach ( array(1, 2, 3) as $rank ){
+				$htmlOutput .= "<input type='text' name='$rank' hidden>";
+			}
 			$htmlOutput .= '<table>';
 			foreach ( $candidates as $id => $name ){
-				$htmlOutput .= "<label><input type='$input_type' name='candidate_id[]' value='$id' $input_req>$name</label><br>";
+				//$htmlOutput .= "<label><input type='$input_type' name='candidate_id[]' value='$id' $input_req>$name</label><br>";
 			}
 			$htmlOutput .= '</table>';
 			$htmlOutput .= "<input class='btn' type='submit' value='Vote'></form>";
@@ -76,7 +104,7 @@
 		}
 		else {
 			$htmlOutput .= "<strong>Access denied.</strong> Please ask the administrator to allow you to vote. <br><a class='btn' href=''>Reload</a>";
-			$htmlOutput .= "<script>document.body.onload=function(){setTimeout(function(){window.location=''}, 1000)}</script>";
+			//$htmlOutput .= "<script>document.body.onload=function(){setTimeout(function(){window.location=''}, 1000)}</script>";
 		}
 	}
 
