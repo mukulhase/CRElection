@@ -22,8 +22,11 @@
 			<script>
 				function checkVotes(form) {
 					var inputs = form.getElementsByTagName('input');
-					var rankings =  $('#sortable2').sortable( \"toArray\" )
-					var voted = 0, n_voted = 0;
+					var rankings =  $('#sortable2').sortable( \"toArray\" );
+					if(rankings.length!=3){
+						alert(\"You have to rank 3 candidates!\");
+						return false;
+					}
 					for ( i=0; i<inputs.length; i++ ) {
 						inputs[i].value=rankings[i];
 					}
@@ -42,7 +45,6 @@
 <tr>
 <td valign="top">
 <ul id="sortable1" class="connectedSortable">';
-  //<li class="ui-state-default">Item 1</li>
 			foreach ( $candidates as $id => $name ){
 				$htmlOutput .= "<li class=\"ui-state-default\" id='$id'>$name</li>";
 			}
@@ -60,11 +62,7 @@
     $( "#sortable1, #sortable2" ).sortable({
       connectWith: ".connectedSortable",
       receive: function(event, ui) {
-            // so if > 10
             if (($(this).children().length > 3)&&(this.id=="sortable2")) {
-            	
-                //ui.sender: will cancel the change.
-                //Useful in the \'receive\' callback.
                 $(ui.sender).sortable(\'cancel\');
             }
         }
@@ -89,7 +87,7 @@
 		}
 		else {
 			$htmlOutput .= "<strong>Access denied.</strong> Please ask the administrator to allow you to vote. <br><a class='btn' href=''>Reload</a>";
-			//$htmlOutput .= "<script>document.body.onload=function(){setTimeout(function(){window.location=''}, 1000)}</script>";
+			$htmlOutput .= "<script>document.body.onload=function(){setTimeout(function(){window.location=''}, 1000)}</script>";
 		}
 	}
 
