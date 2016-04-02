@@ -1,6 +1,7 @@
 <?php
 	//CR Election portal
 	require_once("config.php");
+	global $delegationSize;
 	session_start();
 	function get_candidates() {
 		global $DB;
@@ -23,8 +24,8 @@
 				function checkVotes(form) {
 					var inputs = form.getElementsByTagName('input');
 					var rankings =  $('#sortable2').sortable( \"toArray\" );
-					if(rankings.length!=3){
-						alert(\"You have to rank 3 candidates!\");
+					if(rankings.length!=$delegationSize){
+						alert(\"You have to rank $delegationSize candidates!\");
 						return false;
 					}
 					for ( i=0; i<inputs.length; i++ ) {
@@ -62,7 +63,7 @@
     $( "#sortable1, #sortable2" ).sortable({
       connectWith: ".connectedSortable",
       receive: function(event, ui) {
-            if (($(this).children().length > 3)&&(this.id=="sortable2")) {
+            if (($(this).children().length > ' . $delegationSize .' )&&(this.id=="sortable2")) {
                 $(ui.sender).sortable(\'cancel\');
             }
         }
@@ -70,7 +71,7 @@
   });
 </script>
 ';
-			foreach ( array(1, 2, 3) as $rank ){
+			foreach ( range(1,$delegationSize) as $rank ){
 				$htmlOutput .= "<input type='text' name='$rank' hidden>";
 			}
 			$htmlOutput .= "<input class='btn' type='submit' value='Vote'></form>";

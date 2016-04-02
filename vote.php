@@ -16,10 +16,16 @@
 		header("Location: ".$base_url);
 		die();
 	}
-	if ( isset( $_POST["1"] ) && isset( $_POST["2"] ) && isset( $_POST["3"] ) ) {
-
+	if ( true ) {
+		$valid = true;
+		foreach (range(1,$delegationSize) as $index){
+			if(!isset( $_POST[$index] )){
+				$valid = false;
+				break;
+			}
+		}
 		// Process votes
-		if ( false ) {
+		if ( !$valid ) {
 			block_voting();
 			die("Something is wrong");
 		}
@@ -29,7 +35,7 @@
 			die("Some Error Occured. Response is not recorded. Contact Administrator.");
 		}
 		$voteid=mysqli_insert_id($DB);
-		foreach ( array("1","2","3") as $index ) {
+		foreach ( range(1,$delegationSize) as $index ) {
 			$query = mysqli_prepare($DB, "INSERT INTO `ranks` (voteid,candidate,rank) VALUES(?,?,?)");
 			mysqli_stmt_bind_param($query, 'iii', $voteid,$_POST[$index],$index);
 			if ( !mysqli_stmt_execute($query) ) {
