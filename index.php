@@ -25,7 +25,7 @@
 					var inputs = form.getElementsByTagName('input');
 					var rankings =  $('#sortable2').sortable( \"toArray\" );
 					if(rankings.length!=$delegationSize){
-						alert(\"You have to rank $delegationSize candidates!\");
+						dialogSpawn(\"You have to rank $delegationSize candidates!\");
 						return false;
 					}
 					for ( i=0; i<inputs.length; i++ ) {
@@ -39,7 +39,7 @@
 		$candidates = get_candidates();
 		if ( count($candidates) ) {
 			$htmlOutput .= '
-<table class="sortabletable">
+<table class="sortabletable" cellspacing="1">
 <tr>
 <th>Candidates</th><th>Your Ranking</th>
 </tr>
@@ -62,9 +62,11 @@
   $(function() {
     $( "#sortable1, #sortable2" ).sortable({
       connectWith: ".connectedSortable",
+      placeholder: "ui-state-highlight",
       receive: function(event, ui) {
             if (($(this).children().length > ' . $delegationSize .' )&&(this.id=="sortable2")) {
                 $(ui.sender).sortable(\'cancel\');
+                dialogSpawn("Cannot add more candidates");
             }
         }
     }).disableSelection();
