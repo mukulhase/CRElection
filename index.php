@@ -28,7 +28,7 @@
 						dialogSpawn(\"You have to rank $delegationSize candidates!\");
 						return false;
 					}
-					for ( i=0; i<inputs.length; i++ ) {
+					for ( i=0; i<$delegationSize; i++ ) {
 						inputs[i].value=rankings[i];
 					}
 					return true;

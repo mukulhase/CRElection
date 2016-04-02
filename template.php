@@ -5,10 +5,11 @@
 		<link href='<?php echo $base_url; ?>css/normalize.css' rel='stylesheet'>
 		<link href='<?php echo $base_url; ?>css/main.css' rel='stylesheet'>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
-		<script src="//code.jquery.com/jquery-1.10.2.js"></script>
-		<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-		<link rel="stylesheet" href="/resources/demos/style.css">
+		<link rel="stylesheet" href='<?php echo $base_url; ?>css/jquery-ui.min.css'>
+		<link rel="stylesheet" href='<?php echo $base_url; ?>css/theme.css'>
+
+		<script src="<?php echo $base_url; ?>js/jquery.js"></script>
+		<script src="<?php echo $base_url; ?>js/jquery-ui.js"></script>
 	</head>
 	<script>
 		function dialogSpawn(text){
@@ -31,6 +32,7 @@
 			padding: 10px;
 		}
 		#sortable1{
+
 			list-style-type: none;
 		}
 		#sortable2{
@@ -44,10 +46,10 @@
 			background-size: 3px 3px;
 		}
 		#sortable1, #sortable2 {
+			border: 1px solid #000000;
 			min-height: 20px;
 			padding: 5px 0 0 0;
 			width:100%;
-			border: 1px solid #000000;
 
 		}
 		#sortable1 li, #sortable2 li {
@@ -56,6 +58,9 @@
 			margin: 0px 5px 5px 5px;
 			padding: 5px;
 			font-size: 1.2em;
+		}
+		#sortable1 li{
+
 		}
 		#sortable2 li{
 			margin: 0px 5px 5px 30px !important;
