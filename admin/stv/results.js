@@ -109,5 +109,9 @@ function calcResult() {         // Delegation Determination
         removeTrace(TopCand);
     }
 }
-initDS();
-calcResult();
+
+function showResult() {
+    initDS();
+    calcResult();
+    document.getElementById('res_btn').remove();
+}

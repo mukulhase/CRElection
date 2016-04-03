@@ -35,9 +35,10 @@ var votes=new Array('.$votecount.');
 <script src='stv/big.js'></script>
 <script src='stv/frontend.js'></script>
 <script src='stv/results.js'></script>
-<a class='btn btn-green' href='".$base_url."admin/'>Go to Allow Voting</a>
+<button class='btn btn-green' href='".$base_url."admin/'>Go to Allow Voting</button>
+<button id='res_btn' class='btn btn-green' onclick='showResult();''>Show Result</button>
 	<div id='cand_list'>
-	</div> 
+	</div>
 ";
 $htmlOutput.="
 ";
