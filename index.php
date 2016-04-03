@@ -1,12 +1,10 @@
 <?php
-	//CR Election portal
-	require_once("config.php");
-	session_start();
-	
+require_once("config.php");
+session_start();
 
-	$htmlOutput = '';
-	if ( allowed() ) {
-		$htmlOutput .= "
+$htmlOutput = '';
+if (allowed()) {
+    $htmlOutput .= "
 			<script>
 				function checkVotes(form) {
 					var inputs = form.getElementsByTagName('input');
@@ -22,9 +20,9 @@
 				}
 			</script>
 			";
-		$htmlOutput .= "<form action='vote.php' method='post' class='vote' onsubmit='return checkVotes(this)'>";
-		if ( count($candidates) ) {
-			$htmlOutput .= '
+    $htmlOutput .= "<form action='vote.php' method='post' class='vote' onsubmit='return checkVotes(this)'>";
+    if (count($candidates)) {
+        $htmlOutput .= '
 <table class="sortabletable" cellspacing="1">
 <tr>
 <th>Candidates</th><th>Your Ranking</th>
@@ -32,10 +30,10 @@
 <tr>
 <td valign="top">
 <ul id="sortable1" class="connectedSortable">';
-			foreach ( $candidates as $id => $name ){
-				$htmlOutput .= "<li class=\"ui-state-default\" id='$id'>$name</li>";
-			}
-			$htmlOutput.= '
+        foreach ($candidates as $id => $name) {
+            $htmlOutput .= "<li class=\"ui-state-default\" id='$id'>$name</li>";
+        }
+        $htmlOutput .= '
 </ul>
 </td>
  <td valign="top">
@@ -53,25 +51,29 @@
   });
 </script>
 ';
-			foreach ( range(1,count($candidates)) as $rank ){
-				$htmlOutput .= "<input type='text' name='$rank' hidden>";
-			}
-			$htmlOutput .= "<input class='btn' type='submit' value='Vote'></form>";
-		}
-		else {
-			$htmlOutput .= "No Candidates in the list.";
-		}
-	}
-	else {
-		if ( isset( $_SESSION["done_voting"] ) && $_SESSION["done_voting"] ) {
-			$htmlOutput .= "Your response has been recorded.<br><a class='btn' href=''>Refresh</a>";
-			$htmlOutput .= "<script>document.body.onload=function(){setTimeout(function(){window.location=''}, 3000)}</script>";
-			unset($_SESSION["done_voting"]);
-		}
-		else {
-			$htmlOutput .= "<strong>Access denied.</strong> Please ask the administrator to allow you to vote. <br><a class='btn' href=''>Reload</a>";
-			$htmlOutput .= "<script>document.body.onload=function(){setTimeout(function(){window.location=''}, 1000)}</script>";
-		}
-	}
-
-	include('template.php');
+        foreach (range(1, count($candidates)) as $rank) {
+            $htmlOutput .= "<input type='text' name='$rank' hidden>";
+        }
+        $htmlOutput .= "<input class='btn' type='submit' value='Vote'></form>";
+    } else {
+        $htmlOutput .= "No Candidates in the list.";
+    }
+} else {
+    $htmlOutput .= "
+<script>
+document.body.onload=function(){
+setInterval(function(){
+$.get(\"check.php\", function(data, status){
+        console.log(data);
+        if(data==\"true\")window.location='';
+    });
+}, 1000);
+}</script>";
+    if (isset($_SESSION["done_voting"]) && $_SESSION["done_voting"]) {
+        $htmlOutput .= "Your response has been recorded.<br><a class='btn' href=''>Refresh</a>";
+        unset($_SESSION["done_voting"]);
+    } else {
+        $htmlOutput .= "<strong>Access denied.</strong> Please ask the administrator to allow you to vote. <br><a class='btn' href=''>Reload</a>";
+    }
+}
+include('template.php');
