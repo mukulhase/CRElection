@@ -1,40 +1,44 @@
 <?php
 	$auth_required = true;
 	include('../config.php');
-
-	$total_votes = 0;
-	$total_n_votes = 0;
-	$htmlOutput = '<table class="result"><tr><th>Candidate ID</th><th>Candidate Name</th></tr>';
+	$htmlOutput = '<script>var CandidateMap={};';
 
 	$query = mysqli_prepare($DB, "SELECT id,name FROM `candidates`");
 	mysqli_stmt_execute($query);
 	mysqli_stmt_bind_result($query, $id, $name);
 	mysqli_stmt_store_result($query);
 	while(mysqli_stmt_fetch($query)){
-		$htmlOutput .= '<tr><th>'.$id.'</th><td>'.$name.'</td></tr>';
+		$htmlOutput .= 'CandidateMap['.$id.']="'.$name.'";';
 	}
-	$htmlOutput.= '</table><table><tr><th>Vote ID</th><th>Candidate ID</th><th>Rank</th></tr>';
+	$votecount=0;
+	$htmlOutput.= '</script>';
+	$query = mysqli_prepare($DB, "SELECT count(DISTINCT voteid) FROM `ranks`");
+	mysqli_stmt_execute($query);
+	mysqli_stmt_bind_result($query, $votecount);
+	mysqli_stmt_store_result($query);
+	mysqli_stmt_fetch($query);
+	$htmlOutput.= '
+<script>
+var votes=new Array('.$votecount.');
+';
 	$query = mysqli_prepare($DB, "SELECT voteid,candidate,rank FROM `ranks`");
 	mysqli_stmt_execute($query);
 	mysqli_stmt_bind_result($query, $voteid, $candidate, $rank);
 	mysqli_stmt_store_result($query);
 	while(mysqli_stmt_fetch($query)){
-		$htmlOutput .= '<tr><th>'.$voteid.'</th><td>'.$candidate.'</td><td>'.$rank.'</td></tr>';
+		$htmlOutput .= 'if(!votes['.($voteid-1).'])votes['.($voteid-1).']=new Array('.$countCand.');';
+		$htmlOutput .= 'votes['.($voteid-1).']['.($rank-1).']='.$candidate.';';
 	}
-	$htmlOutput .= '</table>';
-	$htmlOutput.= '<script> var votes=[];';
-	$query = mysqli_prepare($DB, "SELECT voteid,candidate,rank FROM `ranks`");
-	mysqli_stmt_execute($query);
-	mysqli_stmt_bind_result($query, $voteid, $candidate, $rank);
-	mysqli_stmt_store_result($query);
-	while(mysqli_stmt_fetch($query)){
-		$htmlOutput .= '
-		if('.$voteid.' in votes){
-			votes['.$voteid.']['.$rank']
-		var vote={"voteid":'.$voteid.',"candidate":'.$candidate.',"rank":'.$rank.'};votes.push(vote);';
-	}
-	$htmlOutput .= 'console.log(votes);</script>';
-
-	$htmlOutput .= "<br><br><br><br><a class='btn btn-green' href='".$base_url."admin/'>Go to Allow Voting</a>";
-
+	$htmlOutput .= '</script>';
+	include("stv/result.js.php");
+	$htmlOutput .= "
+<script src='stv/big.js'></script>
+<script src='stv/frontend.js'></script>
+<script src='stv/results.js'></script>
+<a class='btn btn-green' href='".$base_url."admin/'>Go to Allow Voting</a>
+	<div id='cand_list'>
+	</div> 
+";
+$htmlOutput.="
+";
 	include("../template.php");
