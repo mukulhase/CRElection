@@ -1,4 +1,3 @@
-
 var animDuration = 1800;
 
 function createCandidate(candID, name){
@@ -26,4 +25,42 @@ function updateStatus(txt) {
     $('#status').fadeOut(animDuration/2, function() {
         $(this).text(txt).fadeIn(animDuration/2);
     });
+}
+
+function graphDataRefresh(){
+    var graphLabels=[];
+    var graphVotes=[];
+    for(i in CandidateMap) {
+        graphLabels.push(CandidateMap[i]);
+        if (count[i])
+            graphVotes.push(parseFloat(count[i].toString()));
+        else
+            graphVotes.push(parseFloat(t.toString()));
+    }
+    data = {
+        labels: graphLabels,
+        datasets: [
+            {
+                label: "Votes",
+                fillColor: "rgba(151,187,205,0.5)",
+                strokeColor: "rgba(151,187,205,0.8)",
+                highlightFill: "rgba(151,187,205,0.75)",
+                highlightStroke: "rgba(151,187,205,1)",
+                data: graphVotes
+            }
+        ]
+    };
+}
+
+var myChart;
+var data;
+function fillChart(){
+    var graph= document.getElementById("graph").getContext("2d");
+    graphDataRefresh();
+    myChart = new Chart(graph).Bar(data,{
+        barValueSpacing : 50
+    });
+}
+function updateChart(){
+    myChart.update();
 }

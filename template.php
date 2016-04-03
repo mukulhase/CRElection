@@ -10,7 +10,6 @@
 		<link rel="stylesheet" href='<?php echo $base_url; ?>css/jquery-ui.min.css'>
 		<link rel="stylesheet" href='<?php echo $base_url; ?>css/theme.css'>
 		<link rel="stylesheet" href='<?php echo $base_url; ?>css/template.css'>
-
 		<script src="<?php echo $base_url; ?>js/jquery.js"></script>
 		<script src="<?php echo $base_url; ?>js/jquery-ui.js"></script>
 	</head>

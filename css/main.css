@@ -170,7 +170,7 @@ li .btn.btn-remove {
 	background-color: #73C8C2;
 	padding: 0.6em 1.4em;
 	margin: 0.3em 0;
-	border: 1px solid
+	border: 1px solid;
 	border-radius: 1px;
 	transition: all 1s;
 }

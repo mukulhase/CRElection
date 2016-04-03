@@ -1,7 +1,6 @@
-
+var count={};
 var S = Big(B.length);
 var t = Big(S).div((N+1)).plus(1).round(0,0);       // equivalent to Math.floor(stuff)..
-var count = {};
 
 
 function printB() {
@@ -12,7 +11,6 @@ function printB() {
 
 function initDS() {
     Big.DP = 40;        // The maximum number of decimal places of the results of operations involving division.
-
     for(i in CandidateMap) {          // Init count to zero
         count[i] = Big(0);
         createCandidate(i,CandidateMap[i]);
@@ -84,37 +82,47 @@ function Qualify(TopCand) {
     console.log('Winner:',TopCand);
 }
 
-function Looser(LastCand) {
-    console.log('Looser:',LastCand);
+function loser(LastCand) {
+    console.log('loser:',LastCand);
     frontRemove(LastCand);
 }
 
-
 function calcResult() {         // Delegation Determination
-    var n=0, TopCand, MaxVotes;
-    while(n < N) {
-        TopCand = NextTopCand(count);
-        MaxVotes = count[TopCand];
-        // updateStatus('Next Candidate is: ', CandidateMap[TopCand], 'with',MaxVotes);
-        if( MaxVotes.gte(t)) {
-            Qualify(TopCand);
-            TransferDown(TopCand, MaxVotes);
-            n += 1;
-        } else {
-            // Get the bottom candidate as Top :P
-            TopCand = NextBottomCand(count);
-            Looser(TopCand);
-            TransferUp(TopCand);
+    var n=0, TopCand, MaxVotes, loop;
+    fillChart();
+
+    function iteration(){
+        if(n<N){
+            TopCand = NextTopCand(count);
+            MaxVotes = count[TopCand];
+            // updateStatus('Next Candidate is: ', CandidateMap[TopCand], 'with',MaxVotes);
+            if( MaxVotes.gte(t)) {
+                Qualify(TopCand);
+                TransferDown(TopCand, MaxVotes);
+                n += 1;
+            } else {
+                // Get the bottom candidate as Top :P
+                TopCand = NextBottomCand(count);
+                loser(TopCand);
+                TransferUp(TopCand);
+            }
+            graphDataRefresh();
+            updateChart();
+            removeTrace(TopCand);
         }
-        removeTrace(TopCand);
+        else {
+            clearInterval(loop);
+            for (i in count) {
+                loser(i);
+            }
+        }
     }
+    loop=setInterval(iteration,2000);
+
 }
 
 initDS();
 function showResult() {
     calcResult();
     document.getElementById('res_btn').remove();
-    for(i in count) {
-        Looser(i);
-    }
 }

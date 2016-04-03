@@ -34,11 +34,15 @@ var votes=new Array('.$votecount.');
 	$htmlOutput .= "
 	<div id='cand_list'>
 	</div>
+<button class='btn btn-green' href='".$base_url."admin/'>Go to Allow Voting</button>
+<button id='res_btn' class='btn btn-green' onclick='showResult();''>Show Result</button>
+<div id='cand_list'>
+</div>
+<canvas id=\"graph\" width=\"600\" height=\"400\"></canvas>
+<script src='../js/Chart.min.js'></script>
 <script src='stv/big.js'></script>
 <script src='stv/frontend.js'></script>
 <script src='stv/results.js'></script>
-<button class='btn btn-green' href='".$base_url."admin/'>Go to Allow Voting</button>
-<button id='res_btn' class='btn btn-green' onclick='showResult();''>Show Result</button>
 ";
 $htmlOutput.="
 ";
