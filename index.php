@@ -1,34 +1,21 @@
 <?php
 	//CR Election portal
 	require_once("config.php");
-	global $delegationSize;
 	session_start();
-	function get_candidates() {
-		global $DB;
-		$query = mysqli_prepare($DB, "SELECT id, name FROM `candidates` ORDER BY name");
-		mysqli_stmt_execute($query);
-		mysqli_stmt_bind_result($query, $id, $name);
-		mysqli_stmt_store_result($query);
-		$results = array();
-		while(mysqli_stmt_fetch($query)){
-			$results[$id] = $name;
-		}
-		return $results;
-	}
+	
 
 	$htmlOutput = '';
-
 	if ( allowed() ) {
 		$htmlOutput .= "
 			<script>
 				function checkVotes(form) {
 					var inputs = form.getElementsByTagName('input');
 					var rankings =  $('#sortable2').sortable( \"toArray\" );
-					if(rankings.length!=$delegationSize){
-						dialogSpawn(\"You have to rank $delegationSize candidates!\");
+					if(rankings.length!=$countCand){
+						dialogSpawn(\"You have to rank $countCand candidates!\");
 						return false;
 					}
-					for ( i=0; i<$delegationSize; i++ ) {
+					for ( i=0; i<$countCand; i++ ) {
 						inputs[i].value=rankings[i];
 					}
 					return true;
@@ -36,7 +23,6 @@
 			</script>
 			";
 		$htmlOutput .= "<form action='vote.php' method='post' class='vote' onsubmit='return checkVotes(this)'>";
-		$candidates = get_candidates();
 		if ( count($candidates) ) {
 			$htmlOutput .= '
 <table class="sortabletable" cellspacing="1">
@@ -62,18 +48,12 @@
   $(function() {
     $( "#sortable1, #sortable2" ).sortable({
       connectWith: ".connectedSortable",
-      placeholder: "ui-state-highlight",
-      receive: function(event, ui) {
-            if (($(this).children().length > ' . $delegationSize .' )&&(this.id=="sortable2")) {
-                $(ui.sender).sortable(\'cancel\');
-                dialogSpawn("Cannot add more candidates");
-            }
-        }
+      placeholder: "ui-state-highlight"
     }).disableSelection();
   });
 </script>
 ';
-			foreach ( range(1,$delegationSize) as $rank ){
+			foreach ( range(1,count($candidates)) as $rank ){
 				$htmlOutput .= "<input type='text' name='$rank' hidden>";
 			}
 			$htmlOutput .= "<input class='btn' type='submit' value='Vote'></form>";
