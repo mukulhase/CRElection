@@ -32,13 +32,13 @@ var votes=new Array('.$votecount.');
 	$htmlOutput .= '</script>';
 	include("stv/result.js.php");
 	$htmlOutput .= "
+	<div id='cand_list'>
+	</div>
 <script src='stv/big.js'></script>
 <script src='stv/frontend.js'></script>
 <script src='stv/results.js'></script>
 <button class='btn btn-green' href='".$base_url."admin/'>Go to Allow Voting</button>
 <button id='res_btn' class='btn btn-green' onclick='showResult();''>Show Result</button>
-	<div id='cand_list'>
-	</div>
 ";
 $htmlOutput.="
 ";

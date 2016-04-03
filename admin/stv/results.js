@@ -15,7 +15,7 @@ function initDS() {
 
     for(i in CandidateMap) {          // Init count to zero
         count[i] = Big(0);
-        // createCandidate(i,CandidateMap[i]);
+        createCandidate(i,CandidateMap[i]);
     }
     for (var i=0;i<B.length;i++) {      //Initial Counting
         count[B[i][0]] = (count[B[i][0]]).plus(1.0);
@@ -86,7 +86,7 @@ function Qualify(TopCand) {
 
 function Looser(LastCand) {
     console.log('Looser:',LastCand);
-    // frontRemove(LastCand);
+    frontRemove(LastCand);
 }
 
 
@@ -110,8 +110,11 @@ function calcResult() {         // Delegation Determination
     }
 }
 
+initDS();
 function showResult() {
-    initDS();
     calcResult();
     document.getElementById('res_btn').remove();
+    for(i in count) {
+        Looser(i);
+    }
 }
