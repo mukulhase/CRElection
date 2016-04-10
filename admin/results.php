@@ -1,17 +1,24 @@
 <?php
 	$auth_required = true;
 	include('../config.php');
-	$htmlOutput = '<script>var CandidateMap={};';
+	$htmlOutput = '
+<script>
+var CandidateMap={};
+';
 
 	$query = mysqli_prepare($DB, "SELECT id,name FROM `candidates`");
 	mysqli_stmt_execute($query);
 	mysqli_stmt_bind_result($query, $id, $name);
 	mysqli_stmt_store_result($query);
 	while(mysqli_stmt_fetch($query)){
-		$htmlOutput .= 'CandidateMap['.$id.']="'.$name.'";';
+		$htmlOutput .= '
+		CandidateMap['.$id.']="'.$name.'";
+		';
 	}
 	$votecount=0;
-	$htmlOutput.= '</script>';
+	$htmlOutput.= '
+</script>
+';
 	$query = mysqli_prepare($DB, "SELECT count(DISTINCT voteid) FROM `ranks`");
 	mysqli_stmt_execute($query);
 	mysqli_stmt_bind_result($query, $votecount);
@@ -32,18 +39,23 @@ var votes=new Array('.$votecount.');
 	$htmlOutput .= '</script>';
 	include("stv/result.js.php");
 	$htmlOutput .= "
-	<div id='cand_list'>
-	</div>
-<button class='btn btn-green' href='".$base_url."admin/'>Go to Allow Voting</button>
-<button id='res_btn' class='btn btn-green' onclick='showResult();''>Show Result</button>
+<div class='row'>
+<div class='col-md-6'>
 <div id='cand_list'>
 </div>
-<canvas id=\"graph\" width=\"600\" height=\"400\"></canvas>
+</div>
+<div class='col-md-6'>
+<canvas id=\"graph\">
+</canvas>
+</div>
+</div>
+
+<button class='btn btn-green' href='".$base_url."admin/'>Go to Allow Voting</button>
+<button id='res_btn' class='btn btn-green' onclick='showResult();''>Show Result</button>
+
 <script src='../js/Chart.min.js'></script>
 <script src='stv/big.js'></script>
 <script src='stv/frontend.js'></script>
 <script src='stv/results.js'></script>
-";
-$htmlOutput.="
 ";
 	include("../template.php");

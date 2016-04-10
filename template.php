@@ -4,6 +4,9 @@
 		<title>Election Portal</title>
 		<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
 		<meta content="utf-8" http-equiv="encoding">
+
+		<link href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css' rel='stylesheet'>
+
 		<link href='<?php echo $base_url; ?>css/normalize.css' rel='stylesheet'>
 		<link href='<?php echo $base_url; ?>css/main.css' rel='stylesheet'>
 		<meta name="viewport" content="width=device-width, initial-scale=1">

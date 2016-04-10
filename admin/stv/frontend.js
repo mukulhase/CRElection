@@ -37,6 +37,7 @@ function graphDataRefresh(){
         else
             graphVotes.push(parseFloat(t.toString()));
     }
+    console.log(graphVotes);
     data = {
         labels: graphLabels,
         datasets: [
@@ -58,9 +59,5 @@ function fillChart(){
     var graph= document.getElementById("graph").getContext("2d");
     graphDataRefresh();
     myChart = new Chart(graph).Bar(data,{
-        barValueSpacing : 50
     });
-}
-function updateChart(){
-    myChart.update();
 }

@@ -106,11 +106,12 @@ function calcResult() {         // Delegation Determination
                 loser(TopCand);
                 TransferUp(TopCand);
             }
-            graphDataRefresh();
-            updateChart();
+
             removeTrace(TopCand);
+            graphDataRefresh();
         }
         else {
+            console.log("hi");
             clearInterval(loop);
             for (i in count) {
                 loser(i);
