@@ -1,7 +1,8 @@
-var count={};
 var S = Big(B.length);
 var t = Big(S).div((N+1)).plus(1).round(0,0);       // equivalent to Math.floor(stuff)..
-
+var count = {};
+var Winners = [];   // Stores the winner candidates in order of votes.
+var losers = [];   // Stores the winner candidates in order of votes.
 
 function printB() {
     for(var i=0; i<B.length;i++) {
@@ -22,25 +23,31 @@ function initDS() {
 
 
 function NextTopCand(dict) {
-    var key, val = Big(-1);
+    var res = [], val = Big(-1);
     for(i in dict) {
         if ((dict[i]).gte(val)) {
+            if (!(dict[i]).eq(val)) {
+                res = [];
+            }
             val = dict[i];
-            key = i;
+            res.push(i);                 // Push person with same votes
         }
     }
-    return key;
+    return res[Math.floor(Math.random()*res.length)];   // Return random person from those with same no of votes
 }
 
 function NextBottomCand(dict) {
-    var key, val = Big(9999999);
+    var res = [], val = Big(9999999);
     for(i in dict) {
         if ((dict[i]).lt(val)) {
+            res = [];
+            res.push(i);
             val = dict[i];
-            key = i;
+        } else if((dict[i]).eq(val)) {
+            res.push(i);                  // Push person with same votes
         }
     }
-    return key;
+    return res[Math.floor(Math.random()*res.length)];   // Return random person from those with same no of votes
 }
 
 
@@ -79,12 +86,19 @@ function removeTrace(cand) {
 }
 
 function Qualify(TopCand) {
-    console.log('Winner:',TopCand);
+    Winners.push(TopCand);
+    console.log('Winner:', TopCand);
 }
 
 function loser(LastCand) {
-    console.log('loser:',LastCand);
+    losers.push(LastCand);
+    console.log('loser:', LastCand);
     frontRemove(LastCand);
+}
+
+function checkReElectionRequired() {
+    if (Winners.length != N)        // If winners != Delegations then declare re-election
+        alert('Papa says. Do it again !!');
 }
 
 function calcResult() {         // Delegation Determination
@@ -109,6 +123,8 @@ function calcResult() {         // Delegation Determination
 
             removeTrace(TopCand);
             graphDataRefresh();
+            myChart.update();
+            console.log("count:",count,"winners:",Winners,"losers",losers);
         }
         else {
             console.log("hi");
@@ -121,6 +137,10 @@ function calcResult() {         // Delegation Determination
     loop=setInterval(iteration,2000);
 
 }
+/*
+function updateNorm() {
+    for( var i in )
+}*/
 
 initDS();
 function showResult() {

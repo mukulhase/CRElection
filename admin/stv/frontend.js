@@ -1,4 +1,6 @@
 var animDuration = 1800;
+var myChart;
+var data;
 
 function createCandidate(candID, name){
     var D = document.createElement('div');
@@ -34,10 +36,34 @@ function graphDataRefresh(){
         graphLabels.push(CandidateMap[i]);
         if (count[i])
             graphVotes.push(parseFloat(count[i].toString()));
+        else{
+            if(Winners.indexOf(i.toString())>=0){
+                graphVotes.push(parseFloat(t.toString()));
+                myChart.datasets[0].bars[i-1].fillColor="rgba(155,227,155,0.5)";
+            }
+            else{
+                graphVotes.push(0);
+                myChart.datasets[0].bars[i-1].fillColor="rgba(144,51,51,0.5)";
+
+            }
+        }
+    }
+    for( var i in graphVotes){
+        myChart.datasets[0].bars[i].value = graphVotes[i];
+    }
+}
+
+function fillChart(){
+    var graph= document.getElementById("graph").getContext("2d");
+    var graphLabels=[];
+    var graphVotes=[];
+    for(i in CandidateMap) {
+        graphLabels.push(CandidateMap[i]);
+        if (count[i])
+            graphVotes.push(parseFloat(count[i].toString()));
         else
             graphVotes.push(parseFloat(t.toString()));
     }
-    console.log(graphVotes);
     data = {
         labels: graphLabels,
         datasets: [
@@ -51,13 +77,6 @@ function graphDataRefresh(){
             }
         ]
     };
-}
-
-var myChart;
-var data;
-function fillChart(){
-    var graph= document.getElementById("graph").getContext("2d");
-    graphDataRefresh();
-    myChart = new Chart(graph).Bar(data,{
+    myChart = new Chart(graph).Bar(data,{responsive: true
     });
 }

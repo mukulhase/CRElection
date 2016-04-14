@@ -40,11 +40,11 @@ var votes=new Array('.$votecount.');
 	include("stv/result.js.php");
 	$htmlOutput .= "
 <div class='row'>
-<div class='col-md-6'>
+<div class='col-md-3'>
 <div id='cand_list'>
 </div>
 </div>
-<div class='col-md-6'>
+<div class='col-md-9'>
 <canvas id=\"graph\">
 </canvas>
 </div>
